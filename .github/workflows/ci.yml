@@ -22,7 +22,6 @@ jobs:
       - uses: docker/metadata-action@v4.4.0
         id: meta
         with:
-          images: my/app
           tags: |
             type=semver,pattern={{version}}
             type=raw,value=latest
@@ -47,4 +46,3 @@ jobs:
         with:
           command: cves
           image: ${{ steps.meta.outputs.tags }}
-          prefix: "local://"
