@@ -47,4 +47,4 @@ jobs:
         with:
           command: cves
           image: ${{ steps.meta.outputs.tags }}
-          exit-code: true
+          github-token: ${{ secrets.GITHUB_TOKEN }}
