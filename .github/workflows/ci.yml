@@ -2,6 +2,7 @@ name: Docker Scout
 
 on:
   push:
+  workflow_dispatch:
 
 env:
   REGISTRY: docker.io
