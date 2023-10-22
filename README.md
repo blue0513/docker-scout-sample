@@ -6,4 +6,4 @@ PoC repository to use:
 
 ## Usage
 
-See [ci.yml](./github/workflows/ci.yml)
+See [ci.yml](./.github/workflows/ci.yml)

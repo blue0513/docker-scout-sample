@@ -1,4 +1,4 @@
-name: Docker Scout
+name: CI
 
 on:
   push:
