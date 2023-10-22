@@ -57,4 +57,4 @@ jobs:
       - uses: docker/scout-action@v1.0.9
         with:
           command: cves
-          image: ${{ input.TAG }}
+          image: ${{ inputs.TAG }}
