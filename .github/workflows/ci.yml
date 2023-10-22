@@ -10,7 +10,7 @@ env:
 
 jobs:
   scout:
-    uses: docker-scout-sample/.github/workflows/scout.yml@main
+    uses: ./.github/workflows/scout.yml@main
     secrets:
       DOCKER_USER: "${{ secrets.DOCKER_USER }}"
       DOCKER_PAT: "${{ secrets.DOCKER_PAT }}"
