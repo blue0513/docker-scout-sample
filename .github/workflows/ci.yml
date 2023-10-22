@@ -16,7 +16,7 @@ jobs:
       DOCKER_PAT: "${{ secrets.DOCKER_PAT }}"
     with:
       CONTEXT: "."
-      REGISTRY: "${{ env.REGISTRY }}"
+      REGISTRY: "docker.io"
 
   # build:
   #   runs-on: ubuntu-latest
