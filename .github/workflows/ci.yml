@@ -9,40 +9,49 @@ env:
   TAG: "my/app:latest"
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
+  scout:
+    uses: docker-scout-sample/.github/workflows/scout.yml@main
+    secrets:
+      DOCKER_USER: "${{ secrets.DOCKER_USER }}"
+      DOCKER_PAT: "${{ secrets.DOCKER_PAT }}"
+    with:
+      CONTEXT: "."
+      REGISTRY: "${{ env.REGISTRY }}"
 
-    permissions:
-      contents: read
-      packages: write
+  # build:
+  #   runs-on: ubuntu-latest
 
-    steps:
-      - uses: actions/checkout@v3
-      - uses: docker/login-action@v2.1.0
-        with:
-          registry: ${{ env.REGISTRY }}
-          username: ${{ secrets.DOCKER_USER }}
-          password: ${{ secrets.DOCKER_PAT }}
+  #   permissions:
+  #     contents: read
+  #     packages: write
 
-      # --------------
-      # Docker build
-      # --------------
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #     - uses: docker/login-action@v2.1.0
+  #       with:
+  #         registry: ${{ env.REGISTRY }}
+  #         username: ${{ secrets.DOCKER_USER }}
+  #         password: ${{ secrets.DOCKER_PAT }}
 
-      - uses: docker/setup-buildx-action@v2.5.0
-      - uses: docker/build-push-action@v4.0.0
-        with:
-          context: .
-          push: false
-          tags: ${{ env.TAG }}
-          outputs: type=docker,dest=./myimage.tar
+  #     # --------------
+  #     # Docker build
+  #     # --------------
 
-      # --------------
-      # Docker scout
-      # --------------
+  #     - uses: docker/setup-buildx-action@v2.5.0
+  #     - uses: docker/build-push-action@v4.0.0
+  #       with:
+  #         context: .
+  #         push: false
+  #         tags: ${{ env.TAG }}
+  #         outputs: type=docker,dest=./myimage.tar
 
-      - run: |
-          docker load --input ./myimage.tar
-      - uses: docker/scout-action@v1.0.9
-        with:
-          command: cves
-          image: ${{ env.TAG }}
+  #     # --------------
+  #     # Docker scout
+  #     # --------------
+
+  #     - run: |
+  #         docker load --input ./myimage.tar
+  #     - uses: docker/scout-action@v1.0.9
+  #       with:
+  #         command: cves
+  #         image: ${{ env.TAG }}

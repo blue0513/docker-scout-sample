@@ -1,0 +1,55 @@
+name: Scout
+
+on:
+  workflow_call:
+    inputs:
+      CONTEXT:
+        required: true
+        type: string
+      REGISTRY:
+        required: false
+        default: "docker.io"
+        type: string
+    secrets:
+      DOCKER_USER:
+        required: true
+      DOCKER_PAT:
+        required: true
+
+env:
+  TAG: "my/app:latest"
+  TAR_DIST: "./myimage.tar"
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: docker/login-action@v2.1.0
+        with:
+          registry: ${{ inputs.REGISTRY }}
+          username: ${{ secrets.DOCKER_USER }}
+          password: ${{ secrets.DOCKER_PAT }}
+
+      # --------------
+      # Docker build
+      # --------------
+
+      - uses: docker/setup-buildx-action@v2.5.0
+      - uses: docker/build-push-action@v4.0.0
+        with:
+          context: ${{ inputs.CONTEXT }}
+          tags: ${{ env.TAG }}
+          push: false
+          outputs: type=docker,dest="${{ env.TAR_DIST }}"
+
+      # --------------
+      # Docker scout
+      # --------------
+
+      - run: |
+          docker load --input "${{ env.TAR_DIST}}"
+      - uses: docker/scout-action@v1.0.9
+        with:
+          command: cves
+          image: ${{ env.TAG }}
