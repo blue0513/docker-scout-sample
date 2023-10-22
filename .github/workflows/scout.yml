@@ -41,14 +41,14 @@ jobs:
           context: ${{ inputs.CONTEXT }}
           tags: ${{ env.TAG }}
           push: false
-          outputs: type=docker,dest="${{ env.TAR_DIST }}"
+          outputs: type=docker,dest=${{ env.TAR_DIST }}
 
       # --------------
       # Docker scout
       # --------------
 
       - run: |
-          docker load --input "${{ env.TAR_DIST}}"
+          docker load --input ${{ env.TAR_DIST}}
       - uses: docker/scout-action@v1.0.9
         with:
           command: cves
