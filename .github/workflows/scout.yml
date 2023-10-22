@@ -6,6 +6,9 @@ on:
       CONTEXT:
         required: true
         type: string
+      TAG:
+        required: true
+        type: string
       REGISTRY:
         required: false
         default: "docker.io"
@@ -17,13 +20,16 @@ on:
         required: true
 
 env:
-  TAG: "my/app:latest"
   TAR_DIST: "./myimage.tar"
 
 jobs:
   update:
     runs-on: ubuntu-latest
     steps:
+      # --------------
+      # Setup
+      # --------------
+
       - uses: actions/checkout@v3
       - uses: docker/login-action@v2.1.0
         with:
@@ -39,7 +45,7 @@ jobs:
       - uses: docker/build-push-action@v4.0.0
         with:
           context: ${{ inputs.CONTEXT }}
-          tags: ${{ env.TAG }}
+          tags: ${{ inputs.TAG }}
           push: false
           outputs: type=docker,dest=${{ env.TAR_DIST }}
 
@@ -47,9 +53,8 @@ jobs:
       # Docker scout
       # --------------
 
-      - run: |
-          docker load --input ${{ env.TAR_DIST}}
+      - run: docker load --input ${{ env.TAR_DIST}}
       - uses: docker/scout-action@v1.0.9
         with:
           command: cves
-          image: ${{ env.TAG }}
+          image: ${{ input.TAG }}
